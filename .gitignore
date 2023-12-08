@@ -1,0 +1,7 @@
+.ipynb_checkpoints
+.DS_Store
+__pycache__
+*.pyc
+*.csv
+1_Python/airflow
+2_ML/data
