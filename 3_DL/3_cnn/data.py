@@ -21,6 +21,17 @@ def get_mnist(root: str) -> tuple[datasets.mnist.MNIST, datasets.mnist.MNIST]:
 
 
 def get_dataloaders(train_set: Dataset, test_set: Dataset, batch_size: int) -> tuple[DataLoader, DataLoader]:
+    """
+    Get train and test data loaders.
+
+    Parameters:
+    - train_set (Dataset): The training dataset.
+    - test_set (Dataset): The testing dataset.
+    - batch_size (int): The batch size for data loaders.
+
+    Returns:
+    tuple: A tuple containing train and test data loaders.
+    """
     train_loader = DataLoader(dataset=train_set, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_set, batch_size=batch_size, shuffle=False)
 

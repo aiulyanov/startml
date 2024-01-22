@@ -10,7 +10,26 @@ import utils
 logger = utils.setup_logger()
 
 
-def train_epoch(model, loader: DataLoader, optimizer, criterion, device):
+def train_epoch(
+        model: nn.Module,
+        loader: DataLoader,
+        optimizer: optim.Optimizer,
+        criterion: nn.Module,
+        device: torch.device
+    ) -> float:
+    """
+    Train the model for one epoch.
+
+    Parameters:
+    - model (nn.Module): The PyTorch model to be trained.
+    - loader (DataLoader): The DataLoader for training data.
+    - optimizer (torch.optim.Optimizer): The optimizer for updating model parameters.
+    - criterion (nn.Module): The loss function.
+    - device (torch.device): The device (CPU or GPU) on which to perform training.
+
+    Returns:
+    float: Average training loss for the epoch.
+    """
 
     model.train()
     running_loss = 0.0
@@ -34,7 +53,26 @@ def train_epoch(model, loader: DataLoader, optimizer, criterion, device):
 
 
 @torch.inference_mode()
-def validate_model(model, loader, criterion, device):
+def validate_model(
+        model: nn.Module,
+        loader: DataLoader,
+        criterion: nn.Module,
+        device: torch.device
+    ) -> tuple[float, float]:
+    """
+    Validate the model.
+
+    Parameters:
+    - model (nn.Module): The PyTorch model to be validated.
+    - loader (DataLoader): The DataLoader for validation data.
+    - criterion (nn.Module): The loss function.
+    - device (torch.device): The device (CPU or GPU) on which to perform validation.
+
+    Returns:
+    tuple: A tuple containing total loss and accuracy.
+    - float: Total validation loss.
+    - float: Accuracy of the model on the validation set.
+    """
 
     model.eval()
     correct = 0
@@ -67,19 +105,40 @@ def validate_model(model, loader, criterion, device):
 
 
 def fit_model(
-        model, 
-        num_epochs, 
-        scheduler, 
-        train_loader, 
-        test_loader, 
-        optimizer, 
-        criterion,
-        early_stopping, 
-        device,
-        model_dir,
-        model_name='model'
-    ):
+        model: nn.Module,
+        num_epochs: int,
+        scheduler: optim.lr_scheduler._LRScheduler,
+        train_loader: DataLoader,
+        test_loader: DataLoader,
+        optimizer: optim.Optimizer,
+        criterion: nn.Module,
+        early_stopping: float,
+        device: torch.device,
+        model_dir: str,
+        model_name: str = 'model'
+    ) -> tuple[list[float], list[float], list[float]]:
+    """
+    Train and validate the model for a specified number of epochs.
 
+    Parameters:
+    - model (nn.Module): The PyTorch model to be trained.
+    - num_epochs (int): Number of training epochs.
+    - scheduler (torch.optim.lr_scheduler._LRScheduler): Learning rate scheduler.
+    - train_loader (DataLoader): DataLoader for training data.
+    - test_loader (DataLoader): DataLoader for validation data.
+    - optimizer (torch.optim.Optimizer): Model optimizer.
+    - criterion (nn.Module): Loss function.
+    - early_stopping (float): Accuracy threshold for early stopping.
+    - device (torch.device): Device (CPU or GPU) on which to perform training.
+    - model_dir (str): Directory to save the trained model.
+    - model_name (str): Name to use when saving the model (default is 'model').
+
+    Returns:
+    tuple: A tuple containing training loss history, validation loss history, and validation accuracy history.
+    - list[float]: Training loss history for each epoch.
+    - list[float]: Validation loss history for each epoch.
+    - list[float]: Validation accuracy history for each epoch.
+    """
     train_loss_hist, val_loss_hist = [], []
     val_acc_hist = []
 
