@@ -3,9 +3,9 @@ from sqlalchemy import Column, Integer, String, func
 
 
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = "user_data"
     __table_args__ = {"schema": "public"}
-    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, primary_key=True)
     gender = Column(Integer)
     age = Column(Integer)
     country = Column(String)

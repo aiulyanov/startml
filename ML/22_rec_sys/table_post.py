@@ -3,9 +3,9 @@ from sqlalchemy import Column, Integer, String
 
 
 class Post(Base):
-    __tablename__ = "post"
+    __tablename__ = "post_text_df"
     __table_args__ = {"schema": "public"}
-    id = Column(Integer, primary_key=True, name="id")
+    post_id = Column(Integer, primary_key=True, name="post_id")
     text = Column(String)
     topic = Column(String)
 
@@ -15,10 +15,10 @@ if __name__ == "__main__":
 
     session = SessionLocal()
     result = [
-        obj.id
+        obj.post_id
         for obj in session.query(Post)
         .filter(Post.topic == "business")
-        .order_by(Post.id.desc())
+        .order_by(Post.post_id.desc())
         .limit(10)
         .all()
     ]

@@ -3,12 +3,12 @@ import datetime
 
 
 class UserGet(BaseModel):
-    id: int
-    gender: int
     age: int
-    country: str
     city: str
+    country: str
     exp_group: int
+    gender: int
+    user_id: int
     os: str
     source: str
 
@@ -17,7 +17,7 @@ class UserGet(BaseModel):
 
 
 class PostGet(BaseModel):
-    id: int
+    post_id: int
     text: str
     topic: str
 
@@ -26,12 +26,11 @@ class PostGet(BaseModel):
 
 
 class FeedGet(BaseModel):
+    timestamp: datetime.datetime
     user_id: int
-    user: UserGet
     post_id: int
-    post: PostGet
     action: str
-    time: datetime.datetime
+    target: int
 
     class Config:
         orm_mode = True

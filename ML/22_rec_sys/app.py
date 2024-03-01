@@ -1,6 +1,5 @@
-from fastapi import FastAPI, HTTPException, Depends
 from typing import List
-
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -21,7 +20,7 @@ def get_db():
 
 @app.get("/user/{id}", response_model=UserGet)
 def get_user(id: int, db: Session = Depends(get_db)):
-    result = db.query(User).filter(User.id == id).first()
+    result = db.query(User).filter(User.user_id == id).first()
     if not result:
         raise HTTPException(404, "user not found")
     return result
@@ -29,18 +28,18 @@ def get_user(id: int, db: Session = Depends(get_db)):
 
 @app.get("/post/{id}", response_model=PostGet)
 def get_post(id: int, db: Session = Depends(get_db)):
-    result = db.query(Post).filter(Post.id == id).first()
+    result = db.query(Post).filter(Post.post_id == id).first()
     if not result:
         raise HTTPException(404, "post not found")
     return result
 
 
 @app.get("/user/{id}/feed", response_model=List[FeedGet])
-def get_user(id: int, limit: int = 10, db: Session = Depends(get_db)):
+def get_user_feed(id: int, limit: int = 10, db: Session = Depends(get_db)):
     result = (
         db.query(Feed)
         .filter(Feed.user_id == id)
-        .order_by(Feed.time.desc())
+        .order_by(Feed.timestamp.desc())
         .limit(limit)
         .all()
     )
@@ -51,14 +50,15 @@ def get_user(id: int, limit: int = 10, db: Session = Depends(get_db)):
             user_id=item.user_id,
             post_id=item.post_id,
             action=item.action,
-            time=item.time,
+            timestamp=item.timestamp,
+            target=item.target
         )
         for item in result
     ]
 
 
 @app.get("/post/{id}/feed", response_model=List[FeedGet])
-def get_post(id: int, limit: int = 10, db: Session = Depends(get_db)):
+def get_post_feed(id: int, limit: int = 10, db: Session = Depends(get_db)):
     result = (
         db.query(Feed)
         .filter(Feed.post_id == id)
